@@ -1,0 +1,15 @@
+// Application details page: documents, verification, decisions, assignment, timeline
+const detail=act(async id=>{const a=await api('/apps/'+id),o=me.role==='officer',mg=['dept_admin','admin'].includes(me.role),closed=['APPROVED','REJECTED'].includes(a.status);
+ const offs=mg&&!closed?await api('/officers'):[];
+ m.innerHTML=`<div class="card"><button class="g" onclick="boot()">← Back</button><h3>${esc(a.ref)} ${badge(a.status)}</h3><p>${esc(a.service)} · Officer: ${esc(a.officer||'')}${a.applicant?` · Applicant: ${esc(a.applicant.name)} (${esc(a.applicant.email)})`:''}</p><p><small>Purpose: ${esc(a.data.purpose)} · Address: ${esc(a.data.address)}</small></p></div>
+ <div class="card tw"><h4>Documents</h4><table>${a.docs.map(d=>`<tr><td>${esc(d.label)} v${d.ver}</td><td><a href="/api/docs/${d.id}/file" target="_blank" rel="noopener">View</a></td><td>${badge(d.result)}</td><td><small>${esc(d.remark||'')}</small></td>${o&&a.status!=='CORRECTION_REQUIRED'&&!closed?`<td class="row"><button class="ok" onclick="vd(${d.id},'VALID')">Valid</button><button class="er" onclick="vd(${d.id},'INVALID')">Invalid</button><button class="g" onclick="vd(${d.id},'CLARIFY')">Clarify</button></td>`:''}</tr>`).join('')}</table></div>
+ ${me.role==='citizen'&&a.status==='CORRECTION_REQUIRED'?`<div class="card"><h4>Upload corrected documents</h4>${a.docs.filter(d=>d.result!=='VALID').map(d=>`<label>${esc(d.label)}</label><input type="file" data-l="${esc(d.label)}">`).join('')}<button onclick="resub(${a.id})">Resubmit</button></div>`:''}
+ ${mg&&!closed?`<div class="card"><h4>Assign officer</h4><div class="row"><select id="of" style="width:auto">${offs.map(x=>`<option value="${x.id}">${esc(x.name)} (${x.load} open)</option>`).join('')}</select><button onclick="asg(${a.id})">Assign</button></div></div>`:''}
+ ${o&&!closed&&a.status!=='CORRECTION_REQUIRED'?`<div class="card"><h4>Decision</h4><textarea id="rm" placeholder="Remarks (required for reject / correction)"></textarea><div class="row"><button class="ok" onclick="dec(${a.id},'approve')">Approve</button><button class="g" onclick="dec(${a.id},'correction')">Request correction</button><button class="er" onclick="dec(${a.id},'reject')">Reject</button></div></div>`:''}
+ <div class="card"><h4>Timeline</h4><div class="tl">${a.history.map(h=>`<div>${badge(h.to_s)} <small>${fd(h.ts)} · ${esc(h.by_name||'')}</small><br>${esc(h.remark)}</div>`).join('')}</div></div>`});
+const vd=act(async(id,r)=>{const remark=r==='VALID'?'':prompt('Remark?')||'';await api(`/docs/${id}/verify`,'POST',{result:r,remark});reopen()});
+const dec=act(async(id,action)=>{await api(`/apps/${id}/decision`,'POST',{action,remark:$('#rm').value});toast('Done');detail(id)});
+const asg=act(async id=>{await api(`/apps/${id}/assign`,'POST',{officer_id:+$('#of').value});detail(id)});
+const resub=act(async id=>{await api(`/apps/${id}/resubmit`,'POST',{docs:await collect()});detail(id)});
+function reopen(){const t=m.querySelector('h3').textContent.split(' ')[0];queueFind(t)}
+async function queueFind(ref){const a=await api('/apps');const x=a.find(y=>y.ref===ref);if(x)detail(x.id)}

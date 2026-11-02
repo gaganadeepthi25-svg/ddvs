@@ -1,0 +1,6 @@
+// New application page: service selection, form and document upload
+function apply(){m.innerHTML=`<div class="card"><h3>New application</h3><label>Service</label><select id="sv" onchange="fields()">${svcs.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('')}</select><div id="ff"></div><button id="sb" onclick="submitApp()">Submit application</button></div>`;fields()}
+function fields(){const s=svcs.find(x=>x.id==$('#sv').value);$('#ff').innerHTML=`<label>Purpose</label><input id="pu"><label>Address</label><textarea id="ad"></textarea><h4>Documents (PDF/JPG/PNG, max 2 MB)</h4>${s.docs.map((d,i)=>`<label>${esc(d)}</label><input type="file" data-l="${esc(d)}" accept=".pdf,.jpg,.jpeg,.png">`).join('')}`}
+const rd=f=>new Promise(r=>{const x=new FileReader();x.onload=()=>r(x.result.split(',')[1]);x.readAsDataURL(f)});
+async function collect(){const o=[];for(const i of document.querySelectorAll('input[type=file]'))if(i.files[0])o.push({label:i.dataset.l,name:i.files[0].name,b64:await rd(i.files[0])});return o}
+const submitApp=act(async()=>{const b=$('#sb');b.disabled=true;try{const r=await api('/apps','POST',{service_id:+$('#sv').value,data:{purpose:$('#pu').value,address:$('#ad').value},docs:await collect()});toast('Submitted: '+r.ref);detail(r.id)}finally{b.disabled=false}});

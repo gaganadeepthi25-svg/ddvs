@@ -1,0 +1,50 @@
+/* DDVS unified theme: clean modern blue, soft shadows, rounded cards (same look on every page) */
+:root{--navy:#12345A;--navy2:#1d4f86;--blue:#2563EB;--ok:#16A34A;--err:#DC2626;--line:#e3eaf5}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.6 'Segoe UI',system-ui,sans-serif;color:#1e293b;min-height:100vh;display:flex;flex-direction:column;background:linear-gradient(180deg,#e6eefb 0,#f4f7fb 460px) no-repeat,#f4f7fb}
+h1,h3,h4{font-family:Georgia,'Times New Roman',serif;color:var(--navy);margin:.2em 0 .5em}
+/* header */
+header{background:#fff;color:var(--navy);display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:12px 28px;box-shadow:0 2px 14px #12345a1a}
+.brand{display:flex;align-items:center;gap:12px;margin-right:auto}.logo{font-size:30px}
+.brand b{font:700 22px Georgia,serif;letter-spacing:3px;display:block;line-height:1.1;color:var(--navy)}.brand small{color:#64748b;font-size:12px;letter-spacing:1px}
+header button{background:#eef3fb;color:var(--navy);border:1px solid #d7e0ee;box-shadow:none}
+header button:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+main{max-width:1040px;width:100%;margin:26px auto;padding:0 16px;flex:1}
+/* hero (home page) */
+.hero{background:radial-gradient(circle at 88% 15%,#60a5fa66,transparent 42%),radial-gradient(circle at 8% 95%,#ffffff22,transparent 38%),linear-gradient(135deg,#12345A,#2563EB);color:#fff;border-radius:20px;text-align:center;padding:64px 28px;margin-bottom:22px;box-shadow:0 16px 36px #2563eb30}
+.hero h1{color:#fff;font-size:40px;letter-spacing:.3px;margin:0 0 12px}.hero p{margin:0 auto;font-size:18px;color:#e3edfb;max-width:640px}
+/* cards */
+.card{background:#fff;border-radius:16px;padding:26px;margin-bottom:20px;box-shadow:0 6px 24px #12345a14}
+.card h3,.card h4{position:relative;padding-bottom:10px;margin-bottom:14px}
+.card h3::after,.card h4::after{content:"";position:absolute;left:0;bottom:0;width:38px;height:3px;border-radius:3px;background:var(--blue)}
+/* buttons */
+button,.btn{background:linear-gradient(135deg,#12345A,#2563EB);color:#fff;border:0;border-radius:999px;padding:9px 22px;cursor:pointer;font:inherit;box-shadow:0 4px 12px #2563eb33;transition:.15s}
+button:hover{filter:brightness(1.1);transform:translateY(-1px)}
+button.g{background:#e8eef8;color:#1e293b;box-shadow:none}button.ok{background:var(--ok);box-shadow:none}button.er{background:var(--err);box-shadow:none}button:disabled{opacity:.5}
+/* forms */
+input,select,textarea{width:100%;padding:11px;border:1px solid #d7e0ee;border-radius:10px;font:inherit;margin:4px 0 10px;background:#f8fafc}
+input:focus,select:focus,textarea:focus{background:#fff;outline:3px solid #2563eb30;border-color:var(--blue)}
+label{color:var(--navy);font-weight:600;font-size:14px}
+/* dashboard cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:16px}
+.stat{background:#fff;border-radius:16px;padding:18px;text-align:center;box-shadow:0 6px 24px #12345a14;color:#64748b}
+.stat b{font:700 32px Georgia,serif;color:var(--navy);display:block}
+/* tables */
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse}
+th{background:#eef3fb;color:var(--navy);text-align:left;padding:11px;font-size:12px;text-transform:uppercase;letter-spacing:.6px}
+th:first-child{border-radius:10px 0 0 10px}th:last-child{border-radius:0 10px 10px 0}
+td{text-align:left;padding:11px;border-bottom:1px solid var(--line);white-space:nowrap}tr:hover td{background:#f8fafd}
+a{color:var(--blue)}
+/* status badges */
+.badge{padding:3px 11px;border-radius:99px;font-size:12px;font-weight:600;background:#dbeafe;color:#1e40af}
+.APPROVED,.VALID{background:#dcfce7;color:#166534}.REJECTED{background:#fee2e2;color:#991b1b}.CORRECTION_REQUIRED,.INVALID,.CLARIFY{background:#fef3c7;color:#92400e}
+/* timeline, misc */
+.tl{border-left:3px solid var(--blue);padding-left:16px;margin-left:6px}.tl div{margin-bottom:14px}small{color:#64748b}
+#toast{position:fixed;bottom:20px;right:20px;background:var(--navy);color:#fff;padding:12px 20px;border-radius:12px;display:none;max-width:80vw;box-shadow:0 8px 24px #0004}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.bar{height:10px;background:linear-gradient(90deg,var(--navy),var(--blue));border-radius:5px;min-width:4px}
+footer{background:#0f2a49;color:#cbd5e1;text-align:center;padding:16px;font-size:13px}
+/* home page only: services shown as a tile grid */
+body.home-page main>.card:last-child{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:14px}
+body.home-page main>.card:last-child h3{grid-column:1/-1;margin-bottom:6px}
+body.home-page main>.card:last-child p{margin:0;padding:14px 16px;background:#f4f7fb;border-radius:12px;border-left:4px solid var(--blue)}
+@media(max-width:600px){header{padding:10px 14px}.hero{padding:34px 18px}.hero h1{font-size:26px}}
